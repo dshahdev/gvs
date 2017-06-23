@@ -1,0 +1,20 @@
+main {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    width: 98%;
+    margin-left: auto;
+    margin-right:auto;
+}
+.search-div {
+    text-align: center;
+    margin:5px;
+    
+}
+.my-button {
+    margin:4px;
+   
+}
+
+.searched-url{
+    margin-left:28%;
+    margin-bottom:5px;
+}

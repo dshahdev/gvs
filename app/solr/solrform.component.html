@@ -1,0 +1,12 @@
+
+<div class="container">
+    <h2>New Search:</h2>
+    <form  #solrForm="ngForm" >
+        <div class="form-group">
+            <!--<label for="search">Search:</label>-->
+            <input type="text" class="form-control" id="search"  required placeholder="{{text}}"
+                 #search name="url" ngModel>
+        </div>
+         <button type="submit" class="btn btn-success" (click)="onSearch(search)" >Submit</button>
+    </form>
+</div>
