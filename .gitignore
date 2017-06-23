@@ -58,5 +58,5 @@ typings/
 .env
 
 #DNX
-project.lock.json
+package.lock.json
 
