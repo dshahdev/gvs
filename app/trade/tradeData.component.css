@@ -9,12 +9,21 @@ main {
     margin:5px;
     
 }
-.my-button {
-    margin:4px;
+.my-table {
+    margin:14px;
    
 }
 
 .searched-url{
     margin-left:28%;
     margin-bottom:5px;
+}
+.my-button {
+    background-color: #6386ea;
+    color: white;
+}
+hr {
+    margin-top: 0px;
+    width: 90%;
+    border: 1px solid #8c8c8c;
 }

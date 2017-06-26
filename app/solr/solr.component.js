@@ -15,7 +15,8 @@ var SolrComponent = (function () {
 SolrComponent = __decorate([
     core_1.Component({
         selector: 'solr-form',
-        templateUrl: "app/solr/solrform.component.html"
+        templateUrl: "app/solr/solrform.component.html",
+        styleUrls: ['app/solr/solr.component.css']
     })
 ], SolrComponent);
 exports.SolrComponent = SolrComponent;
