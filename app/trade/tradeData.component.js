@@ -14,7 +14,8 @@ var shared_service_1 = require("../shared.service");
 var TradeDataComponent = (function () {
     function TradeDataComponent(sharedService) {
         this.sharedService = sharedService;
-        this.tradeUrl = "http://10.0.1.22:8983/solr/gdata/select?indent=on&q=flange%20AND%20mumbai%20AND%20CHINA&rows=100&start=50&wt=json";
+        // private tradeUrl = "http://10.0.1.22:8983/solr/gdata/select?indent=on&q=flange%20AND%20mumbai%20AND%20CHINA&rows=100&start=50&wt=json";
+        this.tradeUrl = "";
     }
     ;
     TradeDataComponent.prototype.getData = function (url) {
@@ -23,7 +24,12 @@ var TradeDataComponent = (function () {
             .then(function (response) { return _this.tradeData = response; });
     };
     TradeDataComponent.prototype.ngOnInit = function () {
-        console.log(this.getData(this.tradeUrl));
+        var _this = this;
+        this.sharedService.getUrl().subscribe(function (str) {
+            _this.tradeUrl = str;
+            console.log('tradeCompo: string %s ', str);
+            console.log(_this.getData(_this.tradeUrl));
+        });
     };
     return TradeDataComponent;
 }());

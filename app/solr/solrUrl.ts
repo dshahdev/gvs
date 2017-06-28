@@ -1,5 +1,6 @@
+
 export class solrUrl {
-    ipAddress: number;
+    ipAddress: string;
     port: number;
     solr_core_name: string;
     rows:number;
@@ -7,7 +8,8 @@ export class solrUrl {
     queryText:string;
 
     url: string;
-    
+    protocol:string = "http://";
+    colon:string = ":";
     FS = "/";
     AMP = "&";
     ROOT = "solr";
@@ -15,4 +17,30 @@ export class solrUrl {
     AMPQ = this.AMP + "q=";
     AMPSTART = this.AMP + "start=";
     AMPROWS = this.AMP + "rows=";
+
+    finalURL:string = "";
+
+    // constructor(){}
+
+    constructor() {
+                }
+    buildURL( address:string, pt: number,  dbName: string, 
+                rw: number, srow:number, qText:string): void {
+
+                    this.ipAddress = address;
+                    this.port = pt;
+                    this.solr_core_name = dbName;
+                    this.rows = rw;
+                    this.start_row = srow;
+                    this.queryText = qText;
+                    this.finalURL = this.protocol + this.ipAddress + this.colon + 
+                                this.port + this.FS + this.ROOT + this.FS +this.solr_core_name +
+                                this.FS + this.SELECT + this.AMPQ + this.queryText + 
+                                this.AMPROWS + this.rows + this.AMPSTART + this.start_row
+        
+    }
+
+    getFinalUrl():string {
+        return this.finalURL;
+    }
 }

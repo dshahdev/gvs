@@ -10,19 +10,26 @@ import { SolrResponse }      from '../solr/solrResponse';
     styleUrls: ['./tradeData.component.css']
 })
 
-export class TradeDataComponent {
+export class TradeDataComponent implements OnInit {
     
     tradeData: SolrResponse;
-    private tradeUrl = "http://10.0.1.22:8983/solr/gdata/select?indent=on&q=flange%20AND%20mumbai%20AND%20CHINA&rows=100&start=50&wt=json";
+    // private tradeUrl = "http://10.0.1.22:8983/solr/gdata/select?indent=on&q=flange%20AND%20mumbai%20AND%20CHINA&rows=100&start=50&wt=json";
 
+    private tradeUrl = "";
     constructor(private sharedService: SharedService){};
-
+    
     getData(url:string):void{
         this.sharedService.getData(url)
             .then(response => this.tradeData = response);
     }
 
     ngOnInit(){
-        console.log(this.getData(this.tradeUrl));
+        this.sharedService.getUrl().subscribe((str:string)=> {
+            this.tradeUrl = str;
+            console.log('tradeCompo: string %s ',str);
+            console.log(this.getData(this.tradeUrl));
+
+        })
+        
     }
 }

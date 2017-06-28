@@ -12,4 +12,6 @@ import { TradeDataComponent } from './trade/tradeData.component';
               <solr-form></solr-form>
               <my-trade></my-trade>`
 })
-export class AppComponent { }
+export class AppComponent { 
+  
+}

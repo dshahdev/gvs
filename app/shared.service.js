@@ -11,11 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
-require("rxjs/add/operator/toPromise");
-require("rxjs/add/operator/map");
+var Subject_1 = require("rxjs/Subject");
+// import 'rxjs/add/operator/toPromise';
+// import 'rxjs/add/operator/map';
 var SharedService = (function () {
     function SharedService(http) {
         this.http = http;
+        this.subject = new Subject_1.Subject();
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
     }
     SharedService.prototype.getData = function (url) {
@@ -27,6 +29,13 @@ var SharedService = (function () {
     SharedService.prototype.handleError = function (error) {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
+    };
+    SharedService.prototype.setUrl = function (newUrl) {
+        this.url = newUrl;
+        this.subject.next(newUrl);
+    };
+    SharedService.prototype.getUrl = function () {
+        return this.subject.asObservable();
     };
     return SharedService;
 }());
