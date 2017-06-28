@@ -16,6 +16,7 @@ var TradeDataComponent = (function () {
         this.sharedService = sharedService;
         // private tradeUrl = "http://10.0.1.22:8983/solr/gdata/select?indent=on&q=flange%20AND%20mumbai%20AND%20CHINA&rows=100&start=50&wt=json";
         this.tradeUrl = "";
+        this.set_start = 0;
     }
     ;
     TradeDataComponent.prototype.getData = function (url) {
@@ -25,11 +26,16 @@ var TradeDataComponent = (function () {
     };
     TradeDataComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.sharedService.getUrl().subscribe(function (str) {
-            _this.tradeUrl = str;
-            console.log('tradeCompo: string %s ', str);
-            console.log(_this.getData(_this.tradeUrl));
+        this.sharedService.getTradeData().subscribe(function (data) {
+            _this.tradeData = data;
         });
+    };
+    TradeDataComponent.prototype.onNext = function () {
+        console.log("Next button is clicked");
+        this.set_start = 10;
+        this.sharedService.setStartRow(this.set_start);
+    };
+    TradeDataComponent.prototype.onPrev = function () {
     };
     return TradeDataComponent;
 }());

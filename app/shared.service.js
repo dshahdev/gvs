@@ -18,12 +18,15 @@ var SharedService = (function () {
     function SharedService(http) {
         this.http = http;
         this.subject = new Subject_1.Subject();
+        this.resSubject = new Subject_1.Subject();
+        this.setStSubject = new Subject_1.Subject();
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
     }
     SharedService.prototype.getData = function (url) {
+        var _this = this;
         return this.http.get(url)
             .toPromise()
-            .then(function (response) { return response.json(); })
+            .then(function (response) { return _this.setTradeData(response.json()); })
             .catch(this.handleError);
     };
     SharedService.prototype.handleError = function (error) {
@@ -33,9 +36,20 @@ var SharedService = (function () {
     SharedService.prototype.setUrl = function (newUrl) {
         this.url = newUrl;
         this.subject.next(newUrl);
+        this.getData(this.url);
     };
-    SharedService.prototype.getUrl = function () {
-        return this.subject.asObservable();
+    SharedService.prototype.setTradeData = function (tData) {
+        this.resSubject.next(tData);
+    };
+    SharedService.prototype.getTradeData = function () {
+        return this.resSubject.asObservable();
+    };
+    SharedService.prototype.setStartRow = function (newRow) {
+        this.newRow = newRow;
+        this.setStSubject.next(newRow);
+    };
+    SharedService.prototype.getStartRow = function () {
+        return this.setStSubject.asObservable();
     };
     return SharedService;
 }());

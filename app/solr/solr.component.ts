@@ -14,7 +14,7 @@ export class SolrComponent implements OnInit {
     text:string = "";
     url:solrUrl = new solrUrl();
     start:number = 0;
-    numRows: number = 100;
+    numRows: number = 10;
     constructor(private sharedService: SharedService) {}
 
 
@@ -23,6 +23,8 @@ export class SolrComponent implements OnInit {
 //                 rw: number, srow:number, qText:string
 
     onSearch(searchText:string){
+        this.text = searchText;
+
         console.log("submit is clicked" + searchText);
         
         this.url.buildURL("10.0.1.22",8983,"gdata",this.numRows,this.start,searchText);
@@ -30,10 +32,15 @@ export class SolrComponent implements OnInit {
         console.log(this.url.getFinalUrl());
         
         this.sharedService.setUrl(this.url.getFinalUrl());
-        
-        
+      
     }
-    ngOnInit(){
+    
 
+    ngOnInit(){
+        this.sharedService.getStartRow().subscribe((num:number) => {
+            this.start = num;
+            this.url.buildURL("10.0.1.22",8983,"gdata",this.numRows,this.start,this.text);  
+            this.sharedService.setUrl(this.url.getFinalUrl());
+        })   
     }
 }
