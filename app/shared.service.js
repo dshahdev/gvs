@@ -20,6 +20,7 @@ var SharedService = (function () {
         this.subject = new Subject_1.Subject();
         this.resSubject = new Subject_1.Subject();
         this.setStSubject = new Subject_1.Subject();
+        this.pageSubject = new Subject_1.Subject();
         this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
     }
     SharedService.prototype.getData = function (url) {
@@ -38,18 +39,32 @@ var SharedService = (function () {
         this.subject.next(newUrl);
         this.getData(this.url);
     };
+    SharedService.prototype.getUrl = function () {
+        return this.url;
+    };
     SharedService.prototype.setTradeData = function (tData) {
         this.resSubject.next(tData);
     };
     SharedService.prototype.getTradeData = function () {
         return this.resSubject.asObservable();
     };
-    SharedService.prototype.setStartRow = function (newRow) {
-        this.newRow = newRow;
-        this.setStSubject.next(newRow);
+    SharedService.prototype.setStartRow = function (newStart) {
+        this.newRow = newStart;
+        this.setStSubject.next(newStart);
+        return this.newRow;
     };
     SharedService.prototype.getStartRow = function () {
         return this.setStSubject.asObservable();
+    };
+    SharedService.prototype.setPages = function (newPage, totalCounts) {
+        this.pages = newPage;
+        this.totalCounts = totalCounts;
+        this.pageSubject.next(newPage);
+        console.log("in set page: " + this.pages + " and totalcounts are: " + totalCounts);
+    };
+    SharedService.prototype.getPages = function () {
+        console.log("sending set page: " + this.pages);
+        return this.pageSubject.asObservable();
     };
     return SharedService;
 }());

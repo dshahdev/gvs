@@ -12,6 +12,8 @@ import { SolrResponse }     from './solr/solrResponse';
 export class SharedService {
     private url:string;
     private newRow: number;
+    private pages: number;
+    private totalCounts:number;
 
     private subject: Subject<string> = new Subject<string>();
 
@@ -19,6 +21,7 @@ export class SharedService {
 
     private setStSubject: Subject<number> = new Subject<number>();
 
+    private pageSubject: Subject<number> = new Subject<number>();
 
     private headers = new Headers({'Content-Type': 'application/json'});
 
@@ -46,25 +49,41 @@ export class SharedService {
         this.getData(this.url);
     }
 
+    getUrl():string {
+        
+        return this.url;
+    }
+
     setTradeData(tData: SolrResponse):any {
        
-        this.resSubject.next(tData);
-        
+        this.resSubject.next(tData);    
     }
 
     getTradeData(): Observable<SolrResponse> {
-
+        
         return this.resSubject.asObservable();
     }
 
-    setStartRow(newRow:number){
-        this.newRow = newRow;
-        this.setStSubject.next(newRow);
+    setStartRow(newStart:number):number{
+        this.newRow = newStart;
+        this.setStSubject.next(newStart);
+        return this.newRow;
     }
-    
+
     getStartRow(): Observable<number> {
         return this.setStSubject.asObservable();
     }
 
+    setPages(newPage:number, totalCounts: number):void{ 
+            this.pages = newPage;
+            this.totalCounts = totalCounts;
+            this.pageSubject.next(newPage);
+            console.log("in set page: "+ this.pages + " and totalcounts are: "+totalCounts);
+    }
+
+    getPages():Observable<number>{
+        console.log("sending set page: "+ this.pages)
+        return this.pageSubject.asObservable();
+    }
     
 }

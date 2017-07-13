@@ -2,8 +2,8 @@
     <div class="row ">
             <h2 class="col-xs-6">Requested data</h2>
             <div class="col-xs-2">
-                <button type="submit" class="btn my-button" (click)="onPrev()" >Previous</button>
-                <button type="submit" class="btn my-button" (click)="onNext()" >Next</button>
+                <button [disabled]="disabledPrev" type="submit" #prevButton class="btn my-button" (click)="onPrev()" >Previous</button>
+                <button [disabled]="disabledNext" type="submit" #nextButton class="btn my-button" (click)="onNext()" >Next</button>
             </div>
             <!--<div class="col-xs-2">
                 <button type="submit" class="btn my-button" (click)="onPrev()" >Next</button>

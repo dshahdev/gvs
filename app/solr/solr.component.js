@@ -20,22 +20,40 @@ var SolrComponent = (function () {
         this.start = 0;
         this.numRows = 10;
     }
-    // address:string, pt: number,  dbName: string, 
-    //                 rw: number, srow:number, qText:string
     SolrComponent.prototype.onSearch = function (searchText) {
         this.text = searchText;
-        console.log("submit is clicked" + searchText);
+        console.log("submit is clicked: " + searchText);
         this.url.buildURL("10.0.1.22", 8983, "gdata", this.numRows, this.start, searchText);
-        // this.url="http://10.0.1.22:8983/solr/gdata/select?indent=on&q=flange%20AND%20mumbai%20AND%20CHINA&rows=100&start=50&wt=json";
-        console.log(this.url.getFinalUrl());
         this.sharedService.setUrl(this.url.getFinalUrl());
     };
     SolrComponent.prototype.ngOnInit = function () {
+        // this code is hooked with service
+        // so whenever there is any chnage in service
+        // it will reflect here too.
         var _this = this;
         this.sharedService.getStartRow().subscribe(function (num) {
             _this.start = num;
             _this.url.buildURL("10.0.1.22", 8983, "gdata", _this.numRows, _this.start, _this.text);
             _this.sharedService.setUrl(_this.url.getFinalUrl());
+        });
+        this.setPagging();
+    };
+    SolrComponent.prototype.setPagging = function () {
+        var _this = this;
+        this.sharedService.getPages().subscribe(function (page) {
+            _this.page = page;
+            // this.totalCounts = totalCounts;
+            console.log("I got: " + _this.start);
+            if (_this.page === 1) {
+                _this.start = _this.start + 10;
+                _this.url.buildURL("10.0.1.22", 8983, "gdata", _this.numRows, _this.start, _this.text);
+                _this.sharedService.setUrl(_this.url.getFinalUrl());
+            }
+            else if (_this.page === -1) {
+                _this.start = _this.start - 10;
+                _this.url.buildURL("10.0.1.22", 8983, "gdata", _this.numRows, _this.start, _this.text);
+                _this.sharedService.setUrl(_this.url.getFinalUrl());
+            }
         });
     };
     return SolrComponent;

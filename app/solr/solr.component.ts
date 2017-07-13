@@ -15,32 +15,58 @@ export class SolrComponent implements OnInit {
     url:solrUrl = new solrUrl();
     start:number = 0;
     numRows: number = 10;
+    page: number;
+    totalCounts: number;
     constructor(private sharedService: SharedService) {}
-
-
-
-// address:string, pt: number,  dbName: string, 
-//                 rw: number, srow:number, qText:string
 
     onSearch(searchText:string){
         this.text = searchText;
 
-        console.log("submit is clicked" + searchText);
+        console.log("submit is clicked: " + searchText);
         
         this.url.buildURL("10.0.1.22",8983,"gdata",this.numRows,this.start,searchText);
-        // this.url="http://10.0.1.22:8983/solr/gdata/select?indent=on&q=flange%20AND%20mumbai%20AND%20CHINA&rows=100&start=50&wt=json";
-        console.log(this.url.getFinalUrl());
-        
-        this.sharedService.setUrl(this.url.getFinalUrl());
       
+        this.sharedService.setUrl(this.url.getFinalUrl());
+        
+        
     }
-    
-
+   
     ngOnInit(){
+        // this code is hooked with service
+        // so whenever there is any chnage in service
+        // it will reflect here too.
+
         this.sharedService.getStartRow().subscribe((num:number) => {
             this.start = num;
             this.url.buildURL("10.0.1.22",8983,"gdata",this.numRows,this.start,this.text);  
             this.sharedService.setUrl(this.url.getFinalUrl());
-        })   
+        }) ;
+        this.setPagging();  
+    }
+
+    setPagging(){
+
+        this.sharedService.getPages().subscribe((page:number ) => {
+            this.page = page;
+            // this.totalCounts = totalCounts;
+            console.log("I got: "+this.start); 
+
+            if(this.page === 1){
+
+                this.start = this.start + 10;
+                this.url.buildURL("10.0.1.22",8983,"gdata",this.numRows,this.start,this.text); 
+                this.sharedService.setUrl(this.url.getFinalUrl());  
+            
+            } else if(this.page === -1){
+
+                this.start = this.start - 10;
+                this.url.buildURL("10.0.1.22",8983,"gdata",this.numRows,this.start,this.text);
+                this.sharedService.setUrl(this.url.getFinalUrl());  
+
+            }  
+       })
+       
+        
+        
     }
 }

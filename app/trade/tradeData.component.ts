@@ -14,34 +14,66 @@ import { solrUrl } from "../solr/solrUrl";
 export class TradeDataComponent implements OnInit {
     
     tradeData: SolrResponse;
-    // private tradeUrl = "http://10.0.1.22:8983/solr/gdata/select?indent=on&q=flange%20AND%20mumbai%20AND%20CHINA&rows=100&start=50&wt=json";
-
-    private tradeUrl = "";
-    private solrUrl: solrUrl;
-    private set_start:number = 0;
+    pageUp:number = -1;
+    pageDown:number = 1;
+    totalCounts:number;
+    start:number;
+    rows:number;
+    lastRow:number;
+    disabledNext = false;
+    disabledPrev = false;
 
     constructor(private sharedService: SharedService){};
     
-    getData(url:string):void{
-        this.sharedService.getData(url)
-            .then(response => this.tradeData = response);
-    }
-
+   
     ngOnInit(){
         this.sharedService.getTradeData().subscribe((data:SolrResponse) => {
             this.tradeData = data;
+            this.totalCounts = this.tradeData.response.numFound;
+            this.start = this.tradeData.response.start;
+            this.rows = this.tradeData.response.docs.length;
+            this.lastRow = this.start + this.rows;
+
+            // to disable button after certain action
+            // add [disabled]="isDisabled" to html page
+            // and in function, use, this.isDisabled = true;
+
+            console.log(this.tradeData);
+            console.log("totalCounts: "+this.tradeData.response.numFound);
+            console.log("starting: "+this.start);
+            console.log("lastRow: "+this.lastRow);
+            console.log("rows: "+this.rows);
+
+            if(this.lastRow >= this.totalCounts) {
+                console.log("lastRow: "+this.lastRow);
+                console.log("disable next button");
+                this.disabledNext = true;
+
+            } 
+            if(this.start == 0 ){
+                console.log("disable prev button");
+                this.disabledPrev = true;
+                this.disabledNext = false;
+            }
+            if(this.start > 0){
+                console.log("enable prev button");
+                this.disabledPrev = false;
+            }
 
         })   
     }
 
-    onNext(){
+    onNext(event){
+        
 
         console.log("Next button is clicked"); 
-        this.set_start = 10;
-        this.sharedService.setStartRow(this.set_start);
+       
+        this.sharedService.setPages(this.pageDown, this.totalCounts);
     }
 
     onPrev(){
-
+        console.log("prev button is clicked");
+        
+        this.sharedService.setPages(this.pageUp, this.totalCounts)
     }
 }

@@ -22,8 +22,8 @@ export class solrUrl {
 
     // constructor(){}
 
-    constructor() {
-                }
+    constructor() {}
+    
     buildURL( address:string, pt: number,  dbName: string, 
                 rw: number, srow:number, qText:string): void {
 

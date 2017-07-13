@@ -14,28 +14,51 @@ var shared_service_1 = require("../shared.service");
 var TradeDataComponent = (function () {
     function TradeDataComponent(sharedService) {
         this.sharedService = sharedService;
-        // private tradeUrl = "http://10.0.1.22:8983/solr/gdata/select?indent=on&q=flange%20AND%20mumbai%20AND%20CHINA&rows=100&start=50&wt=json";
-        this.tradeUrl = "";
-        this.set_start = 0;
+        this.pageUp = -1;
+        this.pageDown = 1;
+        this.disabledNext = false;
+        this.disabledPrev = false;
     }
     ;
-    TradeDataComponent.prototype.getData = function (url) {
-        var _this = this;
-        this.sharedService.getData(url)
-            .then(function (response) { return _this.tradeData = response; });
-    };
     TradeDataComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.sharedService.getTradeData().subscribe(function (data) {
             _this.tradeData = data;
+            _this.totalCounts = _this.tradeData.response.numFound;
+            _this.start = _this.tradeData.response.start;
+            _this.rows = _this.tradeData.response.docs.length;
+            _this.lastRow = _this.start + _this.rows;
+            // to disable button after certain action
+            // add [disabled]="isDisabled" to html page
+            // and in function, use, this.isDisabled = true;
+            console.log(_this.tradeData);
+            console.log("totalCounts: " + _this.tradeData.response.numFound);
+            console.log("starting: " + _this.start);
+            console.log("lastRow: " + _this.lastRow);
+            console.log("rows: " + _this.rows);
+            if (_this.lastRow >= _this.totalCounts) {
+                console.log("lastRow: " + _this.lastRow);
+                console.log("disable next button");
+                _this.disabledNext = true;
+            }
+            if (_this.start == 0) {
+                console.log("disable prev button");
+                _this.disabledPrev = true;
+                _this.disabledNext = false;
+            }
+            if (_this.start > 0) {
+                console.log("enable prev button");
+                _this.disabledPrev = false;
+            }
         });
     };
-    TradeDataComponent.prototype.onNext = function () {
+    TradeDataComponent.prototype.onNext = function (event) {
         console.log("Next button is clicked");
-        this.set_start = 10;
-        this.sharedService.setStartRow(this.set_start);
+        this.sharedService.setPages(this.pageDown, this.totalCounts);
     };
     TradeDataComponent.prototype.onPrev = function () {
+        console.log("prev button is clicked");
+        this.sharedService.setPages(this.pageUp, this.totalCounts);
     };
     return TradeDataComponent;
 }());
