@@ -21,6 +21,7 @@ var SolrComponent = (function () {
         this.numRows = 10;
     }
     SolrComponent.prototype.onSearch = function (searchText) {
+        //search text : flange AND mumbai AND china AND SHANGHAI == to test app
         this.text = searchText;
         console.log("submit is clicked: " + searchText);
         this.url.buildURL("10.0.1.22", 8983, "gdata", this.numRows, this.start, searchText);

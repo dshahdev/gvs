@@ -26,6 +26,7 @@
       'angular2-datatable': 'node_modules/angular2-datatable',
       'lodash': 'npm:lodash/lodash.js',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api',
+      // 'ng2-responsive':              'npm:ng2-responsive'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -43,7 +44,11 @@
       'angular-in-memory-web-api': {
         main: './index.js',
         defaultExtension: 'js'
-      }
+      },
+      // 'ng2-responsive': {
+      //           main: 'index.js',
+      //           defaultExtension: 'js'
+      // }
     }
   });
 })(this);

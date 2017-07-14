@@ -20,6 +20,8 @@ export class SolrComponent implements OnInit {
     constructor(private sharedService: SharedService) {}
 
     onSearch(searchText:string){
+        //search text : flange AND mumbai AND china AND SHANGHAI == to test app
+        
         this.text = searchText;
 
         console.log("submit is clicked: " + searchText);
